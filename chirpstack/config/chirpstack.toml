@@ -1,0 +1,22 @@
+[logging]
+  level="info"
+
+[postgresql]
+  dsn="postgres://chirpstack:Password123@db/chirpstack?sslmode=disable"
+
+[redis]
+  servers=["redis://:Password123@redis/"]
+
+[network]
+  net_id="000000"
+  enabled_regions=["eu868"]
+
+[api]
+  secret="smart-parking-secret-2026"
+
+[integration]
+  enabled=["mqtt"]
+
+  [integration.mqtt]
+    server="tcp://mqtt:1883"
+    json=true

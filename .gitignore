@@ -1,0 +1,31 @@
+# ================================
+# SECRETS - NE JAMAIS PUSHER
+# ================================
+.env
+
+# ================================
+# DONNÉES VOLUMÉTRIQUES
+# ================================
+data/pgdata/
+data/redis/
+data/portainer/
+
+# ================================
+# LOGS ET DONNÉES MOSQUITTO
+# ================================
+mosquitto/log/
+mosquitto/data/
+
+# ================================
+# LOGS HOMEPAGE
+# ================================
+homepage/config/logs/
+
+# ================================
+# FICHIERS SYSTÈME
+# ================================
+*.swp
+*.log
+*.tmp
+__pycache__/
+.DS_Store

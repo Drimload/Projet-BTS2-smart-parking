@@ -1,0 +1,17 @@
+# Backend configuration
+[backend]
+  type="semtech_udp"
+
+  [backend.semtech_udp]
+    udp_bind="0.0.0.0:1700"
+
+# Integration configuration
+[integration]
+  marshaler="protobuf"
+
+  [integration.mqtt]
+    event_topic_template="eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}"
+    command_topic_template="eu868/gateway/{{ .GatewayID }}/command/#"
+    server="tcp://mqtt:1883"
+    username=""
+    password=""

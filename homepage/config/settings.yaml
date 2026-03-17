@@ -1,0 +1,28 @@
+title: Smart Parking CREPS
+description: Tableau de bord Smart Parking
+background: "#0f172a"
+theme: dark
+color: slate
+
+layout:
+  Smart Parking:
+    style: row
+    columns: 2
+
+  Infrastructure:
+    style: row
+    columns: 3
+
+# Autoriser l'accès depuis toutes tes IPs
+allowedHosts:
+  - 192.168.112.141      # Serveur principal
+  - 192.168.1.62         # Serveur secondaire / Pi ?
+  - 192.168.112.1        # Gateway réseau local (si besoin)
+  - localhost
+  - 127.0.0.1
+  - 0.0.0.0             # Permet tout (attention sécurité)
+
+# IP de chez toi (à remplacer par ton IP WAN publique)
+# Pour trouver ton IP publique : https://whatismyipaddress.com
+# Exemple :
+# - 82.64.123.45        # Ton IP fixe chez toi

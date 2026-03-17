@@ -1,0 +1,113 @@
+services:
+  # Base de données PostgreSQL
+  db:
+    image: postgres:15
+    container_name: smart-parking_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  # Interface pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: smart-parking_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  # Broker MQTT Mosquitto
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: smart-parking_mqtt
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: smart-parking_redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ./data/redis:/data
+
+  # ChirpStack - Serveur LoRaWAN
+  chirpstack:
+    image: chirpstack/chirpstack:4
+    container_name: smart-parking_chirpstack
+    restart: always
+    command: -c /etc/chirpstack
+    volumes:
+      - ./chirpstack/config:/etc/chirpstack
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+      - mqtt
+    environment:
+      - CHIRPSTACK_POSTGRESQL_DSN=postgres://${CHIRPSTACK_DB_USER}:${CHIRPSTACK_DB_PASSWORD}@db/chirpstack?sslmode=disable
+      - CHIRPSTACK_REDIS_SERVERS=redis://:${REDIS_PASSWORD}@redis/
+      - CHIRPSTACK_NETWORK_NET_ID=000000
+      - CHIRPSTACK_NETWORK_ENABLED_REGIONS=eu868
+      - CHIRPSTACK_API_SECRET=${CHIRPSTACK_API_SECRET}
+      - CHIRPSTACK_INTEGRATION_ENABLED=mqtt
+      - CHIRPSTACK_INTEGRATION_MQTT_SERVER=tcp://mqtt:1883
+
+  # ChirpStack Gateway Bridge
+  chirpstack-gateway-bridge:
+    image: chirpstack/chirpstack-gateway-bridge:4
+    container_name: smart-parking_gwbridge
+    restart: always
+    ports:
+      - "1700:1700/udp"
+    volumes:
+      - ./chirpstack/gateway-bridge:/etc/chirpstack-gateway-bridge
+    depends_on:
+      - mqtt
+    environment:
+      - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mqtt:1883
+      - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}
+      - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/command/#
+
+  # Homepage - Tableau de bord
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: smart-parking_homepage
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./homepage/config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS=${HOMEPAGE_ALLOWED_HOSTS}
+
+  # Portainer
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: smart-parking_portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/portainer:/data

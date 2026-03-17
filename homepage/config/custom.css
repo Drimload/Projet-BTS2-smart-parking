@@ -1,0 +1,15 @@
+/* 1) Couleur spéciale pour la carte Homepage */
+#smartparking-homepage.service-card {
+  background-color: rgba(0, 123, 255, 0.18) !important;
+  border: 1px solid #007bff !important;
+}
+
+/* 2) Marquer toutes les cartes cliquables (avec href) */
+a.service-card {
+  border-left: 4px solid #4caf50;           /* bande verte pour dire "clic possible" */
+}
+
+/* Optionnel : au survol, renforcer l'effet */
+a.service-card:hover {
+  filter: brightness(1.05);
+}
