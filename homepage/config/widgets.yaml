@@ -13,3 +13,8 @@
 - search:
     provider: duckduckgo
     target: _blank
+
+- datetime:
+    format:
+      timeStyle: short
+      dateStyle: short

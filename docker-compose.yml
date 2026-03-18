@@ -99,7 +99,7 @@ services:
       - ./homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=${HOMEPAGE_ALLOWED_HOSTS}
+      - HOMEPAGE_ALLOWED_HOSTS=*
 
   # Portainer
   portainer:
