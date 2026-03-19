@@ -1,48 +1,50 @@
----
-- Applications :
+- Applications:
     - ChirpStack:
-        href: http://pi-smart-parking:8080
+        href: http://100.118.69.115:8080
         target: _blank
-        description: LoRaWAN Server
+        description: "100.118.69.115:8080 • LoRaWAN Server • Identifiant: admin - MDP: Password123"
         icon: mdi-radio-tower
         container: smart-parking_chirpstack
 
     - pgAdmin:
-        href: http://pi-smart-parking:5050
-        description: "pi-smart-parking:5050 • Interface BDD • Identifiant: admin@smartparking.com - MPD: Password123"
+        href: http://100.118.69.115:5050
+        target: _blank
+        description: "100.118.69.115:5050 • Interface BDD • Identifiant: admin@smartparking.com - MDP: Password123"
         icon: mdi-database-cog
         container: smart-parking_pgadmin
 
     - Portainer:
-        href: http://pi-smart-parking:9000
-        description: "pi-smart-parking:9000 • Gestion Docker • Identifiant: admin - MPD: Password1234"
+        href: http://100.118.69.115:9000
+        target: _blank
+        description: "100.118.69.115:9000 • Gestion Docker • Identifiant: admin - MDP: Password1234"
         icon: mdi-docker
         container: smart-parking_portainer
 
     - Homepage:
-        href: http://pi-smart-parking:3000
-        description: "pi-smart-parking:3000 • Dashboard Applications • Identifiant: admin - MPD: Password123"
+        href: http://100.118.69.115:3000
+        target: _blank
+        description: "100.118.69.115:3000 • Dashboard Applications"
         icon: mdi-view-dashboard
         container: smart-parking_homepage
 
 - Smart Parking Serveur:
     - Gateway Bridge:
-        description: "UDP pi-smart-parking:1700 • LoRa Gateway Bridge"
+        description: "UDP 100.118.69.115:1700 • LoRa Gateway Bridge"
         icon: mdi-access-point
         container: smart-parking_gwbridge
 
     - MQTT:
-        description: "pi-smart-parking:1883 • Mosquitto broker"
+        description: "100.118.69.115:1883 • Mosquitto Broker"
         icon: mdi-connection
         container: smart-parking_mqtt
 
     - Redis:
-        description: "pi-smart-parking:6379 • Cache server"
+        description: "100.118.69.115:6379 • Cache Server"
         icon: mdi-memory
         container: smart-parking_redis
 
 - Database:
     - PostgreSQL:
-        description: "pi-smart-parking:5432 • BDD PostgreSQL"
+        description: "100.118.69.115:5432 • BDD PostgreSQL"
         icon: mdi-database
         container: smart-parking_db
