@@ -1,8 +1,9 @@
 ---
 - Applications :
     - ChirpStack:
-        href: http://pi-smart-parking::8080
-        description: "pi-smart-parking::8080 • LoRaWAN Serveur • Identifiant: admin - MPD: Password123"
+        href: http://pi-smart-parking:8080
+        target: _blank
+        description: LoRaWAN Server
         icon: mdi-radio-tower
         container: smart-parking_chirpstack
 
