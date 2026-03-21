@@ -98,8 +98,11 @@ services:
     volumes:
       - ./homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=*
+      - HOMEPAGE_VAR_IP=${HOMEPAGE_IP}
 
   # Portainer
   portainer:

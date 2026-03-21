@@ -1,27 +1,27 @@
 - Applications:
     - ChirpStack:
-        href: http://100.118.69.115:8080
+        href: http://{{HOMEPAGE_VAR_IP}}:8080
         target: _blank
         description: "100.118.69.115:8080 • LoRaWAN Server • Identifiant: admin - MDP: Password123"
         icon: mdi-radio-tower
         container: smart-parking_chirpstack
 
     - pgAdmin:
-        href: http://100.118.69.115:5050
+        href: http://{{HOMEPAGE_VAR_IP}}:5050
         target: _blank
         description: "100.118.69.115:5050 • Interface BDD • Identifiant: admin@smartparking.com - MDP: Password123"
         icon: mdi-database-cog
         container: smart-parking_pgadmin
 
     - Portainer:
-        href: http://100.118.69.115:9000
+        href: http://{{HOMEPAGE_VAR_IP}}:9000
         target: _blank
         description: "100.118.69.115:9000 • Gestion Docker • Identifiant: admin - MDP: Password1234"
         icon: mdi-docker
         container: smart-parking_portainer
 
     - Homepage:
-        href: http://100.118.69.115:3000
+        href: http://{{HOMEPAGE_VAR_IP}}:3000
         target: _blank
         description: "100.118.69.115:3000 • Dashboard Applications"
         icon: mdi-view-dashboard
