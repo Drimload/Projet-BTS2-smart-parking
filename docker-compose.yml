@@ -114,3 +114,26 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data/portainer:/data
+
+# Application Web Node.js
+  webapp:
+    image: node:20-alpine
+    container_name: smart-parking_webapp
+    restart: always
+    working_dir: /app
+    ports:
+      - "80:3000"
+    volumes:
+      - ./app:/app
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - db
+      - mqtt
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - MQTT_HOST=mqtt
+      - SESSION_SECRET=smart-parking-session-2026
