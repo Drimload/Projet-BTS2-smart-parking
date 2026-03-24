@@ -115,15 +115,15 @@ ON CONFLICT DO NOTHING;
 -- DONNÉES INITIALES : 3 parkings du CREPS
 -- ============================================================
 INSERT INTO parking (libelle_parking, nombre_places, nombre_places_pmr, statut_infrastructure) VALUES
-    ('Parking Principal',  80, 5, TRUE),
-    ('Parking Secondaire', 30, 3, TRUE),
-    ('Parking PMR',        10, 2, TRUE)
+    ('Parking A',  40, 3, TRUE),
+    ('Parking B', 40, 3, TRUE),
+    ('Parking C', 40, 4, TRUE)
 ON CONFLICT DO NOTHING;
 
 -- ============================================================
 -- DONNÉES INITIALES : compte admin technicien
 -- Email : admin@smartparking.com
--- MDP   : Password123 (hashé bcrypt)
+-- MDP   : (hashé bcrypt)
 -- ============================================================
 INSERT INTO utilisateur (nom_users, prenom_users, email_users, mdp_users, id_type_utilisateur) VALUES
     ('Admin', 'Technicien', 'admin@smartparking.com',
@@ -132,8 +132,16 @@ INSERT INTO utilisateur (nom_users, prenom_users, email_users, mdp_users, id_typ
 ON CONFLICT DO NOTHING;
 
 -- ============================================================
+-- DONNÉES DE TEST : 2 capteurs Fleximodo
+-- ============================================================
+INSERT INTO capteur (libelle_capteur, dev_eui, statut, verrouille, niveau_batterie, id_parking) VALUES
+    ('Capteur Test 1', 'AAAAAAAAAAAAAAAA', TRUE, FALSE, 100, 1),
+    ('Capteur Test 2', 'BBBBBBBBBBBBBBBB', TRUE, FALSE, 100, 1)
+ON CONFLICT DO NOTHING;
+
+-- ============================================================
 -- Base de données ChirpStack
--- DOIT être à la fin car \connect change de base active
+-- DOIT être absolument en dernier car \connect change de base
 -- ============================================================
 CREATE DATABASE chirpstack;
 CREATE USER chirpstack WITH PASSWORD 'Password123';
