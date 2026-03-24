@@ -9,6 +9,7 @@
 data/pgdata/
 data/redis/
 data/portainer/
+data/
 
 # ================================
 # LOGS ET DONNÉES MOSQUITTO
@@ -29,3 +30,8 @@ homepage/config/logs/
 *.tmp
 __pycache__/
 .DS_Store
+
+# Certificats SSL - ne jamais committer
+certs/
+*.key
+*.crt
