@@ -5,22 +5,36 @@
 
 # ================================
 # DONNÉES VOLUMÉTRIQUES
+# (données persistantes Docker)
 # ================================
-data/pgdata/
-data/redis/
-data/portainer/
 data/
 
 # ================================
 # LOGS ET DONNÉES MOSQUITTO
+# (déplacés dans services/)
 # ================================
-mosquitto/log/
-mosquitto/data/
+services/mosquitto/log/
+services/mosquitto/data/
 
 # ================================
 # LOGS HOMEPAGE
 # ================================
-homepage/config/logs/
+services/homepage/config/logs/
+
+# ================================
+# CERTIFICATS SSL
+# (déplacés dans services/)
+# ================================
+services/certs/
+*.key
+*.crt
+
+# ================================
+# NODE.JS
+# (dépendances, ne jamais committer)
+# ================================
+web-app/app-js/node_modules/
+web-app/app-php/vendor/
 
 # ================================
 # FICHIERS SYSTÈME
@@ -30,8 +44,3 @@ homepage/config/logs/
 *.tmp
 __pycache__/
 .DS_Store
-
-# Certificats SSL - ne jamais committer
-certs/
-*.key
-*.crt
