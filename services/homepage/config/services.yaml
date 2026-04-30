@@ -1,4 +1,12 @@
 - Applications:
+
+    - Application Web:
+        href: http://{{HOMEPAGE_VAR_IP}}:80
+        target: _blank
+        description: "100.118.69.115:80 • Smart Parking Web App • PHP"
+        icon: mdi-parking
+        container: smart-parking_webapp
+
     - ChirpStack:
         href: http://{{HOMEPAGE_VAR_IP}}:8080
         target: _blank

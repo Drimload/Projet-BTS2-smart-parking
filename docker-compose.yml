@@ -113,26 +113,23 @@ services:
       - ./data/portainer:/data
 
   # Application Web Node.js
+# Application Web PHP
   webapp:
-    image: node:20-alpine
+    build: ./web-app/app-php
     container_name: smart-parking_webapp
     restart: always
-    working_dir: /app
     ports:
-      - "80:3000"
+      - "80:80"
     volumes:
-      - ./web-app/app-js:/app
-    command: sh -c "npm install && npm start"
+      - ./web-app/app-php:/var/www/html
     depends_on:
       - db
-      - mqtt
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=${POSTGRES_DB}
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - MQTT_HOST=mqtt
       - SESSION_SECRET=${SESSION_SECRET}
 
   # # Reverse Proxy HTTPS - À activer plus tard
