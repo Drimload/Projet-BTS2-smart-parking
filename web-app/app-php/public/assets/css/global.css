@@ -1,48 +1,35 @@
 /* ============================================================
    global.css — Chargé sur toutes les pages via header.php
-   Variables, reset, header, footer, boutons, formulaires,
-   badges, modals et toast.
    ============================================================ */
 
-
-/* ── VARIABLES ──────────────────────────────────────────────────
-   Modifier ici pour répercuter partout dans le projet.
-   ─────────────────────────────────────────────────────────── */
+/* ── VARIABLES ─────────────────────────────────────────────── */
 :root {
-    /* États des places */
     --couleur-libre:        #22c55e;
     --couleur-occupee:      #ef4444;
     --couleur-hors-service: #94a3b8;
     --couleur-pmr:          #3b82f6;
     --couleur-verrouille:   #f59e0b;
 
-    /* Fonds */
     --bg-principal:         #0f172a;
     --bg-carte:             #1e293b;
     --bg-carte-hover:       #273549;
     --bordure:              #334155;
 
-    /* Texte */
     --texte-principal:      #f1f5f9;
     --texte-secondaire:     #94a3b8;
     --texte-code:           #7dd3fc;
 
-    /* Rôles */
     --role-employe:         #8b5cf6;
     --role-admin:           #f59e0b;
     --role-visiteur:        #22c55e;
 
-    /* Utilitaires */
     --rayon:                8px;
     --rayon-lg:             12px;
     --ombre:                0 4px 20px rgba(0,0,0,0.4);
     --fonte:                'Inter', sans-serif;
 }
 
-
-/* ── RESET & BASE ───────────────────────────────────────────────
-   Supprime les marges navigateur, force border-box.
-   ─────────────────────────────────────────────────────────── */
+/* ── RESET & BASE ───────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -57,81 +44,135 @@ a    { color: inherit; text-decoration: none; }
 code { font-family: 'Consolas', monospace; color: var(--texte-code); }
 hr   { border: none; border-top: 1px solid var(--bordure); margin: 1rem 0; }
 
-
-/* ── HEADER ─────────────────────────────────────────────────────
-   Barre sticky : logo gauche, nav centre, user + logout droite.
-   ─────────────────────────────────────────────────────────── */
+/* ── HEADER ─────────────────────────────────────────────────── */
 .site-header {
     display:         flex;
     align-items:     center;
     justify-content: space-between;
-    padding:         0.85rem 2rem;
+    padding:         0 1.75rem;
+    height:          62px;
     background:      var(--bg-carte);
     border-bottom:   1px solid var(--bordure);
     position:        sticky;
     top:             0;
     z-index:         100;
     box-shadow:      var(--ombre);
+    gap:             1rem;
 }
 
 .header-logo {
-    font-size:   1.2rem;
-    font-weight: 700;
-    display:     flex;
-    align-items: center;
-    gap:         0.5rem;
+    display:         flex;
+    align-items:     center;
+    gap:             0.75rem;
+    text-decoration: none;
+    flex-shrink:     0;
+    height:          62px;         /* ← force la hauteur du header */
+    overflow:        hidden;
 }
 
+.header-logo-img {
+    display:    block;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.header-logo-projet {
+    height:     42px;
+    max-height: 42px;
+    width:      auto;
+    max-width:  130px;
+}
+
+.header-logo-creps {
+    height:     36px;
+    max-height: 36px;
+    width:      auto;
+    max-width:  100px;
+    /* masque le fond blanc des JPG sur fond sombre */
+    mix-blend-mode: multiply;
+    filter: brightness(0) invert(1);
+}
+/* Navigation */
 .header-nav {
     display:     flex;
     align-items: center;
-    gap:         1.2rem;
+    gap:         0.4rem;
 }
 
-.header-nav a {
-    color:         var(--texte-secondaire);
-    font-size:     0.9rem;
-    padding:       0.3rem 0.6rem;
+.nav-link {
+    display:       flex;
+    align-items:   center;
+    gap:           0.4rem;
+    padding:       0.4rem 0.8rem;
     border-radius: var(--rayon);
-    transition:    background 0.2s, color 0.2s;
+    font-size:     0.875rem;
+    font-weight:   500;
+    color:         var(--texte-secondaire);
+    text-decoration: none;
+    transition:    background 0.15s, color 0.15s;
 }
 
-.header-nav a:hover,
-.header-nav a.active {
+.nav-link:hover,
+.nav-link.active {
     background: var(--bordure);
     color:      var(--texte-principal);
 }
 
+/* Badge utilisateur */
 .header-user {
-    font-size:     0.85rem;
+    display:       flex;
+    align-items:   center;
+    gap:           0.5rem;
+    font-size:     0.875rem;
+    font-weight:   500;
     color:         var(--texte-secondaire);
-    padding:       0.3rem 0.7rem;
+    padding:       0.35rem 0.75rem;
+    border-radius: var(--rayon);
     background:    var(--bg-principal);
     border:        1px solid var(--bordure);
-    border-radius: var(--rayon);
 }
 
-.header-nav form button {
+.header-role-badge {
+    font-size:      0.72rem;
+    font-weight:    600;
+    padding:        0.15rem 0.5rem;
+    border-radius:  4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.header-role-administrateur { background: rgba(245,158,11,0.15); color: var(--role-admin); }
+.header-role-employe        { background: rgba(139,92,246,0.15); color: var(--role-employe); }
+.header-role-visiteur       { background: rgba(34,197,94,0.15);  color: var(--role-visiteur); }
+
+/* Bouton déconnexion */
+.header-logout-form { margin: 0; }
+
+.btn-outline {
     background:    transparent;
     border:        1px solid var(--bordure);
     color:         var(--texte-secondaire);
-    padding:       0.3rem 0.8rem;
+    padding:       0.38rem 0.8rem;
     border-radius: var(--rayon);
+    font-size:     0.875rem;
+    font-weight:   500;
+    font-family:   var(--fonte);
     cursor:        pointer;
-    font-size:     0.85rem;
-    transition:    background 0.2s;
+    display:       flex;
+    align-items:   center;
+    gap:           0.4rem;
+    transition:    border-color 0.15s, color 0.15s, background 0.15s;
 }
 
-.header-nav form button:hover {
-    background:   #ef4444;
-    color:        white;
+.btn-outline:hover {
     border-color: #ef4444;
+    color:        #ef4444;
+    background:   rgba(239,68,68,0.08);
 }
 
+.btn-sm { padding: 0.32rem 0.7rem; font-size: 0.82rem; }
 
-/* ── FOOTER ─────────────────────────────────────────────────────
-   Pied de page centré, séparé du contenu par une bordure.
-   ─────────────────────────────────────────────────────────── */
+/* ── FOOTER ─────────────────────────────────────────────────── */
 footer {
     text-align: center;
     padding:    1.2rem;
@@ -141,10 +182,7 @@ footer {
     margin-top: 3rem;
 }
 
-
-/* ── BADGES RÔLE ────────────────────────────────────────────────
-   Pilule colorée affichant le rôle dans le header et la topbar.
-   ─────────────────────────────────────────────────────────── */
+/* ── BADGES RÔLE ─────────────────────────────────────────────── */
 .badge-role {
     font-size:      0.78rem;
     font-weight:    600;
@@ -156,13 +194,10 @@ footer {
 
 .badge-employe,
 .badge-employé        { background: rgba(139,92,246,0.15); color: var(--role-employe); }
-.badge-administrateur { background: rgba(245,158,11,0.15); color: var(--role-admin); }
-.badge-visiteur       { background: rgba(34,197,94,0.15);  color: var(--role-visiteur); }
+.badge-administrateur { background: rgba(245,158,11,0.15);  color: var(--role-admin); }
+.badge-visiteur       { background: rgba(34,197,94,0.15);   color: var(--role-visiteur); }
 
-
-/* ── BADGES ÉTAT ────────────────────────────────────────────────
-   Pilules d'état utilisées dans le panneau latéral et les tableaux.
-   ─────────────────────────────────────────────────────────── */
+/* ── BADGES ÉTAT ─────────────────────────────────────────────── */
 .badge {
     padding:       0.2rem 0.6rem;
     border-radius: 999px;
@@ -174,12 +209,12 @@ footer {
 .badge-occupee      { background: rgba(239,68,68,0.15);  color: var(--couleur-occupee); }
 .badge-hors_service { background: rgba(148,163,184,0.1); color: var(--couleur-hors-service); }
 
-
-/* ── BOUTONS ────────────────────────────────────────────────────
-   Base .btn + variantes. width:100% par défaut, .btn-group pour aligner.
-   ─────────────────────────────────────────────────────────── */
+/* ── BOUTONS ─────────────────────────────────────────────────── */
 .btn {
-    display:       inline-block;
+    display:       inline-flex;
+    align-items:   center;
+    justify-content: center;
+    gap:           0.4rem;
     padding:       0.5rem 1rem;
     border-radius: var(--rayon);
     border:        none;
@@ -203,12 +238,9 @@ footer {
 .btn-full       { width: 100%; margin-top: 1.2rem; }
 
 .btn-group      { display: flex; gap: 0.5rem; }
-.btn-group .btn { margin-top: 0; }
+.btn-group .btn { margin-top: 0; width: auto; }
 
-
-/* ── FORMULAIRES ────────────────────────────────────────────────
-   Champs partagés : connexion, inscription, modals capteur/signalement.
-   ─────────────────────────────────────────────────────────── */
+/* ── FORMULAIRES ─────────────────────────────────────────────── */
 label {
     display:       block;
     font-size:     0.82rem;
@@ -254,10 +286,7 @@ input:focus, textarea:focus, select:focus {
     gap:                   0.75rem;
 }
 
-
-/* ── MODALS ─────────────────────────────────────────────────────
-   Overlay + carte centrée. Activé via la classe .actif en JS.
-   ─────────────────────────────────────────────────────────── */
+/* ── MODALS ──────────────────────────────────────────────────── */
 .modal {
     display:         none;
     position:        fixed;
@@ -290,18 +319,19 @@ input:focus, textarea:focus, select:focus {
     background:    transparent;
     border:        none;
     color:         var(--texte-secondaire);
-    font-size:     1.1rem;
+    font-size:     1rem;
     cursor:        pointer;
-    padding:       0.2rem 0.5rem;
+    padding:       0.25rem 0.5rem;
     border-radius: var(--rayon);
+    display:       flex;
+    align-items:   center;
+    justify-content: center;
+    transition:    background 0.15s;
 }
 
-.modal-close:hover { background: var(--bordure); }
+.modal-close:hover { background: var(--bordure); color: var(--texte-principal); }
 
-
-/* ── TOAST ──────────────────────────────────────────────────────
-   Notification en bas à droite, affiché/masqué via .actif en JS.
-   ─────────────────────────────────────────────────────────── */
+/* ── TOAST ───────────────────────────────────────────────────── */
 .notif {
     position:       fixed;
     bottom:         2rem;
@@ -323,11 +353,9 @@ input:focus, textarea:focus, select:focus {
 .notif.actif        { opacity: 1; transform: translateY(0); }
 .notif.notif-erreur { border-color: var(--couleur-occupee); }
 
-
-/* ── RESPONSIVE ─────────────────────────────────────────────────
-   Ajustements globaux pour mobile.
-   ─────────────────────────────────────────────────────────── */
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .site-header { padding: 0.75rem 1rem; }
+    .site-header { padding: 0 1rem; }
     .form-row    { grid-template-columns: 1fr; }
+    .header-user { display: none; }
 }

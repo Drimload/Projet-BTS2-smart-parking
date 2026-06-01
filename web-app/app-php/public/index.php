@@ -43,19 +43,21 @@ $resume = $pdo->query("
     SELECT
         pk.id_parking,
         pk.libelle_parking,
-        COUNT(p.id_place)                                          AS total_places,
-        COUNT(p.id_place) FILTER (WHERE p.etat = 'libre')         AS places_libres,
-        COUNT(p.id_place) FILTER (WHERE p.etat = 'occupee')       AS places_occupees,
-        COUNT(p.id_place) FILTER (WHERE p.etat = 'hors_service')  AS places_hors_service,
+        pk.nombre_places_pmr                                           AS pmr_total,
+        COUNT(p.id_place)                                              AS total_places,
+        COUNT(p.id_place) FILTER (WHERE p.etat = 'libre'
+                                  AND p.type_place != 'pmr')          AS places_libres,
+        COUNT(p.id_place) FILTER (WHERE p.etat = 'occupee')           AS places_occupees,
+        COUNT(p.id_place) FILTER (WHERE p.etat = 'hors_service')      AS places_hors_service,
         COUNT(p.id_place) FILTER (WHERE p.type_place = 'pmr'
-                                  AND p.etat = 'libre')           AS pmr_libres,
+                                  AND p.etat = 'libre')               AS pmr_libres,
         ROUND(
             COUNT(p.id_place) FILTER (WHERE p.etat = 'occupee')::numeric
             / NULLIF(COUNT(p.id_place), 0) * 100, 1
-        )                                                          AS taux_occupation
+        )                                                              AS taux_occupation
     FROM parking pk
     LEFT JOIN place p ON p.id_parking = pk.id_parking
-    GROUP BY pk.id_parking, pk.libelle_parking
+    GROUP BY pk.id_parking, pk.libelle_parking, pk.nombre_places_pmr
     ORDER BY pk.libelle_parking
 ")->fetchAll();
 

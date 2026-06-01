@@ -1,109 +1,175 @@
 /* ============================================================
    dashboard.css — Spécifique à dashboard.php
-   Topbar, résumé compteurs, grille des places, panneau
-   latéral et signalements.
    ============================================================ */
 
-
-/* ── WRAPPER ────────────────────────────────────────────────────
-   Conteneur principal centré avec padding.
-   ─────────────────────────────────────────────────────────── */
+/* ── WRAPPER ─────────────────────────────────────────────────── */
 .dashboard-wrapper {
-    padding:   1.5rem 2rem;
-    max-width: 1400px;
-    margin:    0 auto;
+    padding:   0;
+    max-width: 100%;
+    margin:    0;
 }
 
-
-/* ── TOPBAR ─────────────────────────────────────────────────────
-   Ligne horodatage + badge rôle en haut du dashboard.
-   ─────────────────────────────────────────────────────────── */
+/* ── TOPBAR ──────────────────────────────────────────────────── */
 .topbar {
     display:         flex;
     justify-content: space-between;
     align-items:     center;
-    margin-bottom:   1.2rem;
+    padding:         0.55rem 2rem;
+    background:      rgba(255,255,255,0.02);
+    border-bottom:   1px solid var(--bordure);
+    font-size:       0.82rem;
+    color:           var(--texte-secondaire);
 }
 
-.maj-info { font-size: 0.82rem; color: var(--texte-secondaire); }
+.maj-info {
+    display:     flex;
+    align-items: center;
+    gap:         0.4rem;
+}
 
-
-/* ── RÉSUMÉ COMPTEURS ───────────────────────────────────────────
-   Grille de cards : une card par parking avec 4 stats chacune.
-   ─────────────────────────────────────────────────────────── */
+/* ── RÉSUMÉ COMPTEURS ────────────────────────────────────────── */
 .resume-grille {
     display:               grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap:                   1rem;
-    margin-bottom:         2rem;
+    padding:               1.25rem 2rem 0.75rem;
 }
 
 .resume-card {
     background:    var(--bg-carte);
     border:        1px solid var(--bordure);
     border-radius: var(--rayon-lg);
-    padding:       1.2rem;
+    padding:       1rem 1.25rem;
 }
 
 .resume-card h3 {
-    font-size:     0.95rem;
-    font-weight:   600;
-    margin-bottom: 1rem;
-    color:         var(--texte-secondaire);
+    font-size:      0.72rem;
+    font-weight:    600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color:          var(--texte-secondaire);
+    margin:         0 0 0.85rem 0;
 }
 
 .resume-stats {
     display:               grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     gap:                   0.5rem;
-    text-align:            center;
 }
 
-.resume-stats .stat span  { display: block; font-size: 1.5rem; font-weight: 700; }
-.resume-stats .stat small { font-size: 0.72rem; color: var(--texte-secondaire); }
+.stat-bloc {
+    border-radius:  var(--rayon);
+    padding:        0.65rem 0.7rem;
+    display:        flex;
+    flex-direction: column;
+    gap:            0.25rem;
+    border:         1px solid transparent;
+}
 
-.stat-libres   { color: var(--couleur-libre); }
-.stat-occupees { color: var(--couleur-occupee); }
-.stat-pmr      { color: var(--couleur-pmr); }
-.stat-taux     { color: var(--texte-principal); }
+.stat-standard {
+    background:   rgba(34,197,94,0.07);
+    border-color: rgba(34,197,94,0.18);
+}
 
+.stat-pmr {
+    background:   rgba(59,130,246,0.08);
+    border-color: rgba(59,130,246,0.2);
+}
 
-/* ── PARKINGS CÔTE À CÔTE ───────────────────────────────────────
-   3 colonnes (une par parking), passe en 1 colonne sous 1100px.
-   ─────────────────────────────────────────────────────────── */
+.stat-global {
+    background:   rgba(245,158,11,0.07);
+    border-color: rgba(245,158,11,0.18);
+}
+
+.stat-header {
+    display:        flex;
+    align-items:    center;
+    gap:            0.35rem;
+    font-size:      0.68rem;
+    font-weight:    600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.stat-standard .stat-header { color: var(--couleur-libre); }
+.stat-pmr      .stat-header { color: var(--couleur-pmr); }
+.stat-global   .stat-header { color: var(--couleur-verrouille); }
+
+.stat-values {
+    display:     flex;
+    align-items: baseline;
+    gap:         0.2rem;
+    margin-top:  0.1rem;
+}
+
+.stat-libre { font-size: 1.5rem; font-weight: 700; color: var(--texte-principal); }
+.stat-sep   { font-size: 0.9rem; color: var(--texte-secondaire); }
+.stat-total { font-size: 0.9rem; color: var(--texte-secondaire); }
+
+.stat-sublabel {
+    font-size: 0.65rem;
+    color:     var(--texte-secondaire);
+}
+
+/* ── LÉGENDE ─────────────────────────────────────────────────── */
+.legende {
+    display:       flex;
+    align-items:   center;
+    flex-wrap:     wrap;
+    gap:           1rem;
+    padding:       0.55rem 2rem;
+    font-size:     0.76rem;
+    color:         var(--texte-secondaire);
+    border-bottom: 1px solid var(--bordure);
+}
+
+.legende-item {
+    display:     flex;
+    align-items: center;
+    gap:         0.4rem;
+}
+
+.legende-dot {
+    width:         10px;
+    height:        10px;
+    border-radius: 3px;
+    flex-shrink:   0;
+}
+
+.dot-libre        { background: var(--couleur-libre); }
+.dot-occupe       { background: var(--couleur-occupee); }
+.dot-sans-capteur { background: rgba(255,255,255,0.1); border: 1px solid var(--bordure); }
+
+/* ── PARKINGS CÔTE À CÔTE ────────────────────────────────────── */
 .parkings-container {
     display:               grid;
     grid-template-columns: repeat(3, 1fr);
     gap:                   1.5rem;
+    padding:               1.25rem 2rem;
     align-items:           start;
 }
 
-.parking-zone { margin-bottom: 2rem; }
+.parking-zone { margin-bottom: 0; }
 
 .parking-zone h2 {
-    font-size:      1rem;
+    font-size:      0.72rem;
     font-weight:    600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     margin-bottom:  0.8rem;
     padding-bottom: 0.4rem;
     border-bottom:  1px solid var(--bordure);
     color:          var(--texte-secondaire);
 }
 
-
-/* ── GRILLE DES PLACES ──────────────────────────────────────────
-   Auto-fill : remplit la ligne avec des cases de min 64px.
-   ─────────────────────────────────────────────────────────── */
+/* ── GRILLE DES PLACES ───────────────────────────────────────── */
 .grille-places {
     display:               grid;
-    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-    gap:                   0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+    gap:                   0.4rem;
 }
 
-
-/* ── PLACE ──────────────────────────────────────────────────────
-   Carte carrée cliquable. États : libre, occupee, hors_service.
-   Modificateurs : pmr (tirets), verrouille (opacité), reservee (pointillés).
-   ─────────────────────────────────────────────────────────── */
+/* ── PLACE ───────────────────────────────────────────────────── */
 .place {
     aspect-ratio:    1;
     border-radius:   var(--rayon);
@@ -113,7 +179,7 @@
     justify-content: center;
     cursor:          pointer;
     transition:      transform 0.15s, box-shadow 0.15s;
-    font-size:       0.72rem;
+    font-size:       0.7rem;
     font-weight:     600;
     border:          2px solid transparent;
     user-select:     none;
@@ -126,29 +192,28 @@
 .place.occupee      { background: rgba(239,68,68,0.15);  border-color: var(--couleur-occupee);      color: var(--couleur-occupee); }
 .place.hors_service { background: rgba(148,163,184,0.1); border-color: var(--couleur-hors-service); color: var(--couleur-hors-service); }
 
-.place.pmr        { border-style: dashed; }
-.place.verrouille { opacity: 0.6; }
-.place.reservee   { border-style: dotted; }
+.place.pmr      { border-style: dashed; }
+.place.reservee { border-style: dotted; }
 
-/* Place sans capteur associé : non cliquable, grisée */
-.place.sans-capteur       { background: rgba(148,163,184,0.06); border-color: #334155; color: #475569; cursor: default; }
+.place.sans-capteur       { background: rgba(148,163,184,0.06); border-color: var(--bordure); color: #475569; cursor: default; }
 .place.sans-capteur:hover { transform: none; box-shadow: none; }
 .place.sans-capteur.pmr   { border-style: dashed; border-color: #475569; }
 
 .place-numero { line-height: 1; }
-.place-icone  { font-size: 0.65rem; margin-top: 2px; }
 
+.place-icone {
+    font-size:   0.6rem;
+    margin-top:  2px;
+    line-height: 1;
+}
 
-/* ── BATTERIE ───────────────────────────────────────────────────
-   Indicateur coloré dans le panneau : vert OK, rouge faible (<20%).
-   ─────────────────────────────────────────────────────────── */
+.place-icone i { font-size: 0.6rem; }
+
+/* ── BATTERIE ────────────────────────────────────────────────── */
 .batterie-ok     { color: var(--couleur-libre);   font-weight: 600; }
 .batterie-faible { color: var(--couleur-occupee); font-weight: 600; }
 
-
-/* ── PANNEAU LATÉRAL ────────────────────────────────────────────
-   Tiroir fixe qui glisse depuis la droite au clic sur une place.
-   ─────────────────────────────────────────────────────────── */
+/* ── PANNEAU LATÉRAL ─────────────────────────────────────────── */
 .panneau-detail {
     position:    fixed;
     top:         0;
@@ -167,22 +232,24 @@
 .panneau-detail.actif { right: 0; }
 
 .panneau-close {
-    position:      absolute;
-    top:           1rem;
-    right:         1rem;
-    background:    transparent;
-    border:        none;
-    color:         var(--texte-secondaire);
-    font-size:     1.2rem;
-    cursor:        pointer;
-    padding:       0.2rem 0.5rem;
-    border-radius: var(--rayon);
-    transition:    background 0.2s;
+    position:        absolute;
+    top:             1rem;
+    right:           1rem;
+    background:      transparent;
+    border:          none;
+    color:           var(--texte-secondaire);
+    font-size:       1rem;
+    cursor:          pointer;
+    padding:         0.25rem 0.5rem;
+    border-radius:   var(--rayon);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    transition:      background 0.2s;
 }
 
-.panneau-close:hover { background: var(--bordure); }
+.panneau-close:hover { background: var(--bordure); color: var(--texte-principal); }
 
-/* Ligne d'info clé/valeur dans le panneau */
 .detail-ligne {
     display:         flex;
     justify-content: space-between;
@@ -194,11 +261,7 @@
 
 .detail-ligne span:first-child { color: var(--texte-secondaire); }
 
-
-/* ── SIGNALEMENTS ───────────────────────────────────────────────
-   Cards de signalement dans le panneau admin.
-   Variante .resolu pour les signalements traités.
-   ─────────────────────────────────────────────────────────── */
+/* ── SIGNALEMENTS ────────────────────────────────────────────── */
 .signalement-item {
     background:    rgba(245,158,11,0.08);
     border:        1px solid rgba(245,158,11,0.3);
@@ -218,17 +281,16 @@
 .signalement-msg    { color: var(--texte-principal); margin-bottom: 0.2rem; }
 .signalement-date   { font-size: 0.75rem; color: var(--texte-secondaire); }
 
-
-/* ── RESPONSIVE DASHBOARD ───────────────────────────────────────
-   Sous 1100px : parkings empilés. Sous 768px : places plus petites.
-   ─────────────────────────────────────────────────────────── */
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 1100px) {
     .parkings-container { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
-    .dashboard-wrapper { padding: 1rem; }
-    .grille-places     { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); }
-    .resume-stats      { grid-template-columns: repeat(2, 1fr); }
-    .panneau-detail    { width: 100%; right: -100%; }
+    .parkings-container { padding: 1rem; }
+    .resume-grille      { padding: 1rem; }
+    .grille-places      { grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); }
+    .resume-stats       { grid-template-columns: 1fr; gap: 0.4rem; }
+    .panneau-detail     { width: 100%; right: -100%; }
+    .legende            { padding: 0.5rem 1rem; }
 }

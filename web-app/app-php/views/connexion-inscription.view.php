@@ -7,7 +7,7 @@
 
         <!-- ── CONNEXION ──────────────────────────────────── -->
         <section class="auth-bloc">
-            <h2>🔑 Se connecter</h2>
+            <h2>Se connecter</h2>
 
             <?php if (!empty($erreur_connexion)): ?>
                 <p class="auth-message auth-erreur">
@@ -37,7 +37,7 @@
 
         <!-- ── INSCRIPTION ────────────────────────────────── -->
         <section class="auth-bloc">
-            <h2>✏️ Créer un compte</h2>
+            <h2>Créer un compte</h2>
 
             <?php if (!empty($erreur_inscription)): ?>
                 <p class="auth-message auth-erreur">

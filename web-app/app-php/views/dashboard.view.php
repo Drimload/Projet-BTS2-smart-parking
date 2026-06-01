@@ -1,13 +1,18 @@
-<!-- ============================================================
-     views/dashboard.view.php
-     ============================================================ -->
+<?php
+// ============================================================
+// views/dashboard.view.php
+// ============================================================
+?>
 
 <div class="dashboard-wrapper">
 
     <!-- ── TOPBAR ─────────────────────────────────────────── -->
     <div class="topbar">
-        <span id="derniere-maj" class="maj-info">Chargement...</span>
-        <span class="badge-role badge-<?= strtolower(iconv("UTF-8", "ASCII//TRANSLIT", $role)) ?>">
+        <span id="derniere-maj" class="maj-info">
+            <i class="fa-regular fa-clock"></i>
+            Chargement...
+        </span>
+        <span class="badge-role badge-<?= strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $role)) ?>">
             <?= htmlspecialchars($role) ?>
         </span>
     </div>
@@ -17,33 +22,73 @@
         <?php foreach ($resume as $r): ?>
         <div class="resume-card" id="resume-<?= $r['id_parking'] ?>">
             <h3><?= htmlspecialchars($r['libelle_parking']) ?></h3>
+
             <div class="resume-stats">
-                <div class="stat">
-                    <span class="stat-libres"><?= $r['places_libres'] ?></span>
-                    <small>Libres</small>
+
+                <!-- Standard -->
+                <div class="stat-bloc stat-standard">
+                    <div class="stat-header">
+                        <i class="fa-solid fa-square-parking"></i>
+                        <span class="stat-label">Standard</span>
+                    </div>
+                    <div class="stat-values">
+                        <span class="stat-libre"><?= $r['places_libres'] - $r['pmr_libres'] ?></span>
+                        <span class="stat-sep">/</span>
+                        <span class="stat-total"><?= $r['total_places'] - ($r['pmr_total'] ?? 0) ?></span>
+                    </div>
+                    <small class="stat-sublabel">libres / total</small>
                 </div>
-                <div class="stat">
-                    <span class="stat-occupees"><?= $r['places_occupees'] ?></span>
-                    <small>Occupées</small>
+
+                <!-- PMR -->
+                <div class="stat-bloc stat-pmr">
+                    <div class="stat-header">
+                        <i class="fa-solid fa-wheelchair"></i>
+                        <span class="stat-label">PMR</span>
+                    </div>
+                    <div class="stat-values">
+                        <span class="stat-libre"><?= $r['pmr_libres'] ?></span>
+                        <span class="stat-sep">/</span>
+                        <span class="stat-total"><?= $r['pmr_total'] ?? '—' ?></span>
+                    </div>
+                    <small class="stat-sublabel">libres / total</small>
                 </div>
-                <div class="stat">
-                    <span class="stat-pmr"><?= $r['pmr_libres'] ?></span>
-                    <small>PMR libres</small>
+
+                <!-- Disponible global -->
+                <div class="stat-bloc stat-global">
+                    <div class="stat-header">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span class="stat-label">Disponible</span>
+                    </div>
+                    <div class="stat-values">
+                        <span class="stat-libre"><?= $r['places_libres'] ?></span>
+                        <span class="stat-sep">/</span>
+                        <span class="stat-total"><?= $r['total_places'] ?></span>
+                    </div>
+                    <small class="stat-sublabel">libres / total</small>
                 </div>
-                <div class="stat">
-                    <span class="stat-taux"><?= $r['taux_occupation'] ?>%</span>
-                    <small>Occupation</small>
-                </div>
+
             </div>
         </div>
         <?php endforeach; ?>
+    </div>
+
+    <!-- ── LÉGENDE ────────────────────────────────────────── -->
+    <div class="legende">
+        <span class="legende-item">
+            <span class="legende-dot dot-libre"></span> Libre
+        </span>
+        <span class="legende-item">
+            <span class="legende-dot dot-occupe"></span> Occupé
+        </span>
+        <span class="legende-item">
+            <span class="legende-dot dot-sans-capteur"></span> Sans capteur
+        </span>
     </div>
 
     <!-- ── GRILLE DES PLACES ──────────────────────────────── -->
     <div class="parkings-container">
         <?php foreach ($parkings as $idParking => $parking): ?>
         <section class="parking-zone">
-
             <h2><?= htmlspecialchars($parking['libelle']) ?></h2>
 
             <div class="grille-places">
@@ -65,16 +110,12 @@
                      data-batterie="<?= $p['niveau_batterie'] ?? '' ?>"
                      data-last-seen="<?= htmlspecialchars($p['last_seen_at'] ?? '') ?>">
 
-                    <span class="place-numero">
-                        <?= htmlspecialchars($p['numero']) ?>
-                    </span>
+                    <span class="place-numero"><?= htmlspecialchars($p['numero']) ?></span>
 
                     <?php if ($p['type_place'] === 'pmr'): ?>
-                        <span class="place-icone">♿</span>
-                    <?php endif; ?>
-
-                    <?php if ($p['verrouille']): ?>
-                        <span class="place-icone">🔒</span>
+                        <span class="place-icone" aria-label="Place PMR">
+                            <i class="fa-solid fa-wheelchair"></i>
+                        </span>
                     <?php endif; ?>
 
                 </div>
@@ -87,7 +128,9 @@
 
     <!-- ── PANNEAU LATÉRAL ────────────────────────────────── -->
     <aside id="panneau-detail" class="panneau-detail">
-        <button id="panneau-close" class="panneau-close" aria-label="Fermer">✕</button>
+        <button id="panneau-close" class="panneau-close" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
         <div id="panneau-contenu"></div>
     </aside>
 
@@ -97,7 +140,9 @@
         <div class="modal-content">
             <button class="modal-close"
                     onclick="fermerModal('modal-signalement')"
-                    aria-label="Fermer">✕</button>
+                    aria-label="Fermer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <h3>Signaler un problème</h3>
             <p>Place : <strong id="signal-place-nom"></strong></p>
             <form id="form-signalement" novalidate>
@@ -107,7 +152,7 @@
                           required
                           placeholder="Ex : Capteur desserré, véhicule abusif..."></textarea>
                 <button type="submit" class="btn btn-primary">
-                    Envoyer le signalement
+                    <i class="fa-solid fa-paper-plane"></i> Envoyer le signalement
                 </button>
             </form>
         </div>
@@ -120,7 +165,9 @@
         <div class="modal-content">
             <button class="modal-close"
                     onclick="fermerModal('modal-capteur')"
-                    aria-label="Fermer">✕</button>
+                    aria-label="Fermer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <h3>Gestion du capteur</h3>
             <form id="form-capteur" novalidate>
                 <input type="hidden" name="id_place"   id="edit-id-place">
@@ -134,7 +181,12 @@
                 <input type="text" id="edit-libelle" name="libelle_capteur"
                        placeholder="ex : Capteur A01">
 
-                <label for="edit-app-key">AppKey <small style="font-weight:normal;color:var(--texte-secondaire)">(32 hex — étiquette du capteur)</small></label>
+                <label for="edit-app-key">
+                    AppKey
+                    <small style="font-weight:normal;color:var(--texte-secondaire)">
+                        (32 hex — étiquette du capteur)
+                    </small>
+                </label>
                 <input type="text" id="edit-app-key" name="app_key"
                        maxlength="32" placeholder="ex : 00000000000000000000000000000000">
 
@@ -144,7 +196,9 @@
                 </label>
 
                 <div class="btn-group">
-                    <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                    </button>
                 </div>
             </form>
         </div>
@@ -156,7 +210,6 @@
 
 </div>
 
-<!-- Transmet le rôle PHP au JS via data-attribute sur <body> -->
 <script>
     document.body.dataset.role = '<?= strtolower(iconv("UTF-8", "ASCII//TRANSLIT", $role)) ?>';
 </script>

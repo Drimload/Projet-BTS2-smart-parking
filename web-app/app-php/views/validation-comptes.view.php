@@ -37,7 +37,7 @@
                                         <input type="hidden" name="id_utilisateur"
                                                value="<?= (int)($compte['id_utilisateur'] ?? 0) ?>">
                                         <button type="submit" name="action" value="valider"
-                                                class="btn btn-success">✅ Valider</button>
+                                                class="btn btn-success">Valider</button>
                                     </form>
                                     <form method="post">
                                         <input type="hidden" name="id_utilisateur"
@@ -45,7 +45,7 @@
                                         <button type="submit" name="action" value="refuser"
                                                 class="btn btn-danger"
                                                 onclick="return confirm('Confirmer le refus ?')">
-                                            ❌ Refuser
+                                            Refuser
                                         </button>
                                     </form>
                                 </div>
@@ -104,7 +104,7 @@
                                             data-role="<?= $compte['id_role'] ?>"
                                             data-employe="<?= htmlspecialchars($compte['numero_employe'] ?? '', ENT_QUOTES) ?>"
                                             onclick="ouvrirModalModifier(this)">
-                                            ✏️ Modifier
+                                            Modifier
                                         </button>
                                         <form method="post">
                                             <input type="hidden" name="id_utilisateur"
@@ -112,7 +112,7 @@
                                             <button type="submit" name="action" value="supprimer"
                                                     class="btn btn-danger"
                                                     onclick="return confirm('Supprimer ce compte ?')">
-                                                🗑️ Supprimer
+                                                Supprimer
                                             </button>
                                         </form>
                                     </div>
@@ -168,7 +168,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="margin-top:1.2rem">
-                    💾 Enregistrer les modifications
+                    Enregistrer les modifications
                 </button>
             </form>
         </div>

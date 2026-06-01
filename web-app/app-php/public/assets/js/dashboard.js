@@ -5,7 +5,6 @@
 const REFRESH_INTERVAL = 5000;
 const ROLE = document.body.dataset.role;
 
-
 // ── POLLING ÉTAT ────────────────────────────────────────────
 function fetchEtat() {
     fetch('/etat.php')
@@ -20,24 +19,37 @@ function fetchEtat() {
             majHorodatage(data.timestamp);
         })
         .catch(err => {
-            document.getElementById('derniere-maj').textContent =
-                '⚠️ Connexion perdue — ' + err.message;
+            const el = document.getElementById('derniere-maj');
+            if (el) el.textContent = 'Connexion perdue — ' + err.message;
         });
 }
-
 
 // ── RÉSUMÉ COMPTEURS ────────────────────────────────────────
 function mettreAJourResume(resume) {
     resume.forEach(pk => {
         const card = document.getElementById('resume-' + pk.id_parking);
         if (!card) return;
-        card.querySelector('.stat-libres').textContent   = pk.places_libres;
-        card.querySelector('.stat-occupees').textContent = pk.places_occupees;
-        card.querySelector('.stat-taux').textContent     = pk.taux_occupation + '%';
-        card.querySelector('.stat-pmr').textContent      = pk.pmr_libres;
+
+        const stdLibre    = parseInt(pk.places_libres) - parseInt(pk.pmr_libres);
+        const stdTotal    = parseInt(pk.total_places)  - parseInt(pk.pmr_total);
+        const globalLibre = parseInt(pk.places_libres);
+        const globalTotal = parseInt(pk.total_places);
+
+        const libreStd = card.querySelector('.stat-standard .stat-libre');
+        const totalStd = card.querySelector('.stat-standard .stat-total');
+        const librePmr = card.querySelector('.stat-pmr .stat-libre');
+        const totalPmr = card.querySelector('.stat-pmr .stat-total');
+        const libreGlb = card.querySelector('.stat-global .stat-libre');
+        const totalGlb = card.querySelector('.stat-global .stat-total');
+
+        if (libreStd) libreStd.textContent = stdLibre;
+        if (totalStd) totalStd.textContent = stdTotal;
+        if (librePmr) librePmr.textContent = pk.pmr_libres;
+        if (totalPmr) totalPmr.textContent = pk.pmr_total;
+        if (libreGlb) libreGlb.textContent = globalLibre;
+        if (totalGlb) totalGlb.textContent = globalTotal;
     });
 }
-
 
 // ── GRILLE DES PLACES ────────────────────────────────────────
 function mettreAJourGrille(places) {
@@ -47,7 +59,7 @@ function mettreAJourGrille(places) {
 
         el.className = 'place'
             + (p.id_capteur ? ' ' + p.etat : ' sans-capteur')
-            + (p.type_place === 'pmr' ? ' pmr'       : '')
+            + (p.type_place === 'pmr' ? ' pmr'     : '')
             + (p.verrouille           ? ' verrouille' : '')
             + (p.reservee             ? ' reservee'   : '');
 
@@ -63,13 +75,11 @@ function mettreAJourGrille(places) {
     });
 }
 
-
 // ── HORODATAGE ───────────────────────────────────────────────
 function majHorodatage(timestamp) {
     const el = document.getElementById('derniere-maj');
     if (el) el.textContent = 'Dernière mise à jour : ' + timestamp;
 }
-
 
 // ── CLIC SUR UNE PLACE ───────────────────────────────────────
 document.addEventListener('click', function(e) {
@@ -95,7 +105,7 @@ document.addEventListener('click', function(e) {
         <h3>Place ${numero}</h3>
         <div class="detail-ligne">
             <span>Type</span>
-            <strong>${type === 'pmr' ? '♿ PMR' : 'Standard'}</strong>
+            <strong>${type === 'pmr' ? 'PMR' : 'Standard'}</strong>
         </div>
         <div class="detail-ligne">
             <span>État</span>
@@ -126,7 +136,7 @@ document.addEventListener('click', function(e) {
             <hr>
             <button class="btn btn-warning"
                 onclick="ouvrirSignalement('${idPlace}', '${numero}')">
-                ⚠️ Signaler un problème
+                Signaler un problème
             </button>
         `;
     }
@@ -150,14 +160,16 @@ document.addEventListener('click', function(e) {
             <h4>Gestion capteur</h4>
             <button class="btn btn-secondary"
                 onclick="ouvrirModalCapteur('${idPlace}', '${idCapteur}', '${devEui}')">
-                ✏️ Modifier / Associer un capteur
+                Modifier / Associer un capteur
             </button>
+            ${idCapteur ? `
             <button class="btn btn-danger"
                 onclick="supprimerCapteur('${idCapteur}', '${numero}')">
-                🗑️ Supprimer de la BDD
+                Supprimer de la BDD
             </button>
+            ` : ''}
             <hr>
-            <h4>⚠️ Signalements</h4>
+            <h4>Signalements</h4>
             <div id="panneau-signalements">
                 <em style="color:var(--texte-secondaire);font-size:0.82rem">Chargement…</em>
             </div>
@@ -167,17 +179,20 @@ document.addEventListener('click', function(e) {
     contenu.innerHTML = html;
     panneau.classList.add('actif');
 
-    if (ROLE.includes('admin') && idCapteur) {
-        chargerSignalements(idCapteur);
+    if (ROLE.includes('admin')) {
+        if (idCapteur) {
+            chargerSignalements(idCapteur);
+        } else {
+            const s = document.getElementById('panneau-signalements');
+            if (s) s.innerHTML = '<p style="color:var(--texte-secondaire);font-size:0.82rem">Aucun capteur associé à cette place.</p>';
+        }
     }
 });
-
 
 // ── FERMER LE PANNEAU ────────────────────────────────────────
 document.getElementById('panneau-close')?.addEventListener('click', () => {
     document.getElementById('panneau-detail').classList.remove('actif');
 });
-
 
 // ── MODAL SIGNALEMENT ────────────────────────────────────────
 function ouvrirSignalement(idPlace, numero) {
@@ -195,27 +210,25 @@ document.getElementById('form-signalement')?.addEventListener('submit', function
             if (res.success) {
                 fermerModal('modal-signalement');
                 this.reset();
-                afficherNotif('✅ Signalement enregistré');
+                afficherNotif('Signalement enregistré');
             } else {
-                afficherNotif('❌ Erreur : ' + res.erreur, true);
+                afficherNotif('Erreur : ' + res.erreur, true);
             }
         });
 });
-
 
 // ── MODAL CAPTEUR ────────────────────────────────────────────
 function ouvrirModalCapteur(idPlace, idCapteur, devEui) {
     document.getElementById('edit-id-place').value   = idPlace;
     document.getElementById('edit-id-capteur').value = idCapteur;
     document.getElementById('edit-dev-eui').value    = devEui;
-    // AppKey toujours vide à l'ouverture (non stockée côté front par sécurité)
     document.getElementById('edit-app-key').value    = '';
     document.getElementById('modal-capteur').classList.add('actif');
 }
 
 function supprimerCapteur(idCapteur, numero) {
     if (!idCapteur) {
-        afficherNotif('❌ Aucun capteur associé à cette place', true);
+        afficherNotif('Aucun capteur associé à cette place', true);
         return;
     }
     if (!confirm(`Supprimer le capteur de la place ${numero} ?`)) return;
@@ -228,11 +241,11 @@ function supprimerCapteur(idCapteur, numero) {
         .then(r => r.json())
         .then(res => {
             if (res.success) {
-                fermerModal('panneau-detail');
-                afficherNotif('✅ Capteur supprimé');
+                document.getElementById('panneau-detail').classList.remove('actif');
+                afficherNotif('Capteur supprimé');
                 fetchEtat();
             } else {
-                afficherNotif('❌ Erreur : ' + res.erreur, true);
+                afficherNotif('Erreur : ' + res.erreur, true);
             }
         });
 }
@@ -248,14 +261,13 @@ document.getElementById('form-capteur')?.addEventListener('submit', function(e) 
             if (res.success) {
                 fermerModal('modal-capteur');
                 this.reset();
-                afficherNotif('✅ Capteur mis à jour');
+                afficherNotif('Capteur mis à jour');
                 fetchEtat();
             } else {
-                afficherNotif('❌ Erreur : ' + res.erreur, true);
+                afficherNotif('Erreur : ' + res.erreur, true);
             }
         });
 });
-
 
 // ── SIGNALEMENTS DANS LE PANNEAU ─────────────────────────────
 function chargerSignalements(idCapteur) {
@@ -271,16 +283,16 @@ function chargerSignalements(idCapteur) {
             }
             conteneur.innerHTML = liste.map(s => `
                 <div class="signalement-item ${s.statut_signalement === 'resolu' ? 'resolu' : ''}">
-                    <div class="signalement-auteur">⚠️ ${s.auteur}</div>
+                    <div class="signalement-auteur">${s.auteur}</div>
                     <div class="signalement-msg">${s.description}</div>
                     <div class="signalement-date">${s.date_signalement}</div>
                     ${s.statut_signalement !== 'resolu'
                         ? `<button class="btn btn-success"
                                 style="margin-top:0.4rem;padding:0.25rem 0.6rem;font-size:0.75rem;width:auto;"
                                 onclick="resoudreSignalement(${s.id_signalement}, this)">
-                                ✅ Marquer résolu
+                                Marquer résolu
                            </button>`
-                        : `<span style="color:var(--couleur-libre);font-size:0.75rem">✅ Résolu</span>`
+                        : `<span style="color:var(--couleur-libre);font-size:0.75rem">Résolu</span>`
                     }
                 </div>
             `).join('');
@@ -301,14 +313,13 @@ function resoudreSignalement(id, btn) {
         if (res.success) {
             const item = btn.closest('.signalement-item');
             item.classList.add('resolu');
-            btn.outerHTML = '<span style="color:var(--couleur-libre);font-size:0.75rem">✅ Résolu</span>';
-            afficherNotif('✅ Signalement résolu');
+            btn.outerHTML = '<span style="color:var(--couleur-libre);font-size:0.75rem">Résolu</span>';
+            afficherNotif('Signalement résolu');
         } else {
-            afficherNotif('❌ Erreur : ' + (res.erreur ?? 'inconnue'), true);
+            afficherNotif('Erreur : ' + (res.erreur ?? 'inconnue'), true);
         }
     });
 }
-
 
 // ── LANCEMENT ────────────────────────────────────────────────
 fetchEtat();
