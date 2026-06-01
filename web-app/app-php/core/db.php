@@ -3,11 +3,11 @@
 // core/db.php
 // ============================================================
 
-$host     = getenv('DB_HOST');
-$port     = getenv('DB_PORT');
-$dbname   = getenv('DB_NAME');
-$user     = getenv('DB_USER');
-$password = getenv('DB_PASSWORD');
+$host     = getenv('DB_HOST');      // → db
+$port     = getenv('DB_PORT');      // → 5432
+$dbname   = getenv('DB_NAME');      // → parking_db
+$user     = getenv('DB_USER');      // → admin
+$password = getenv('DB_PASSWORD');  // → Password123
 
 try {
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
@@ -17,5 +17,13 @@ try {
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 } catch (PDOException $e) {
-    die('Erreur de connexion BDD : ' . $e->getMessage());
+    // Appel AJAX (depuis etat.php) → retourne JSON
+    // Appel page normale → texte lisible
+    $estAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']);
+    if ($estAjax) {
+        header('Content-Type: application/json');
+        die(json_encode(['success' => false, 'erreur' => 'Connexion BDD impossible']));
+    } else {
+        die('Erreur de connexion BDD : ' . $e->getMessage());
+    }
 }

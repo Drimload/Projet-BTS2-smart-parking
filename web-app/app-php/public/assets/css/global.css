@@ -1,0 +1,333 @@
+/* ============================================================
+   global.css — Chargé sur toutes les pages via header.php
+   Variables, reset, header, footer, boutons, formulaires,
+   badges, modals et toast.
+   ============================================================ */
+
+
+/* ── VARIABLES ──────────────────────────────────────────────────
+   Modifier ici pour répercuter partout dans le projet.
+   ─────────────────────────────────────────────────────────── */
+:root {
+    /* États des places */
+    --couleur-libre:        #22c55e;
+    --couleur-occupee:      #ef4444;
+    --couleur-hors-service: #94a3b8;
+    --couleur-pmr:          #3b82f6;
+    --couleur-verrouille:   #f59e0b;
+
+    /* Fonds */
+    --bg-principal:         #0f172a;
+    --bg-carte:             #1e293b;
+    --bg-carte-hover:       #273549;
+    --bordure:              #334155;
+
+    /* Texte */
+    --texte-principal:      #f1f5f9;
+    --texte-secondaire:     #94a3b8;
+    --texte-code:           #7dd3fc;
+
+    /* Rôles */
+    --role-employe:         #8b5cf6;
+    --role-admin:           #f59e0b;
+    --role-visiteur:        #22c55e;
+
+    /* Utilitaires */
+    --rayon:                8px;
+    --rayon-lg:             12px;
+    --ombre:                0 4px 20px rgba(0,0,0,0.4);
+    --fonte:                'Inter', sans-serif;
+}
+
+
+/* ── RESET & BASE ───────────────────────────────────────────────
+   Supprime les marges navigateur, force border-box.
+   ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family:      var(--fonte);
+    background-color: var(--bg-principal);
+    color:            var(--texte-principal);
+    min-height:       100vh;
+    line-height:      1.6;
+}
+
+a    { color: inherit; text-decoration: none; }
+code { font-family: 'Consolas', monospace; color: var(--texte-code); }
+hr   { border: none; border-top: 1px solid var(--bordure); margin: 1rem 0; }
+
+
+/* ── HEADER ─────────────────────────────────────────────────────
+   Barre sticky : logo gauche, nav centre, user + logout droite.
+   ─────────────────────────────────────────────────────────── */
+.site-header {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    padding:         0.85rem 2rem;
+    background:      var(--bg-carte);
+    border-bottom:   1px solid var(--bordure);
+    position:        sticky;
+    top:             0;
+    z-index:         100;
+    box-shadow:      var(--ombre);
+}
+
+.header-logo {
+    font-size:   1.2rem;
+    font-weight: 700;
+    display:     flex;
+    align-items: center;
+    gap:         0.5rem;
+}
+
+.header-nav {
+    display:     flex;
+    align-items: center;
+    gap:         1.2rem;
+}
+
+.header-nav a {
+    color:         var(--texte-secondaire);
+    font-size:     0.9rem;
+    padding:       0.3rem 0.6rem;
+    border-radius: var(--rayon);
+    transition:    background 0.2s, color 0.2s;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+    background: var(--bordure);
+    color:      var(--texte-principal);
+}
+
+.header-user {
+    font-size:     0.85rem;
+    color:         var(--texte-secondaire);
+    padding:       0.3rem 0.7rem;
+    background:    var(--bg-principal);
+    border:        1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+.header-nav form button {
+    background:    transparent;
+    border:        1px solid var(--bordure);
+    color:         var(--texte-secondaire);
+    padding:       0.3rem 0.8rem;
+    border-radius: var(--rayon);
+    cursor:        pointer;
+    font-size:     0.85rem;
+    transition:    background 0.2s;
+}
+
+.header-nav form button:hover {
+    background:   #ef4444;
+    color:        white;
+    border-color: #ef4444;
+}
+
+
+/* ── FOOTER ─────────────────────────────────────────────────────
+   Pied de page centré, séparé du contenu par une bordure.
+   ─────────────────────────────────────────────────────────── */
+footer {
+    text-align: center;
+    padding:    1.2rem;
+    font-size:  0.8rem;
+    color:      var(--texte-secondaire);
+    border-top: 1px solid var(--bordure);
+    margin-top: 3rem;
+}
+
+
+/* ── BADGES RÔLE ────────────────────────────────────────────────
+   Pilule colorée affichant le rôle dans le header et la topbar.
+   ─────────────────────────────────────────────────────────── */
+.badge-role {
+    font-size:      0.78rem;
+    font-weight:    600;
+    padding:        0.25rem 0.75rem;
+    border-radius:  999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-employe,
+.badge-employé        { background: rgba(139,92,246,0.15); color: var(--role-employe); }
+.badge-administrateur { background: rgba(245,158,11,0.15); color: var(--role-admin); }
+.badge-visiteur       { background: rgba(34,197,94,0.15);  color: var(--role-visiteur); }
+
+
+/* ── BADGES ÉTAT ────────────────────────────────────────────────
+   Pilules d'état utilisées dans le panneau latéral et les tableaux.
+   ─────────────────────────────────────────────────────────── */
+.badge {
+    padding:       0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size:     0.78rem;
+    font-weight:   600;
+}
+
+.badge-libre        { background: rgba(34,197,94,0.15);  color: var(--couleur-libre); }
+.badge-occupee      { background: rgba(239,68,68,0.15);  color: var(--couleur-occupee); }
+.badge-hors_service { background: rgba(148,163,184,0.1); color: var(--couleur-hors-service); }
+
+
+/* ── BOUTONS ────────────────────────────────────────────────────
+   Base .btn + variantes. width:100% par défaut, .btn-group pour aligner.
+   ─────────────────────────────────────────────────────────── */
+.btn {
+    display:       inline-block;
+    padding:       0.5rem 1rem;
+    border-radius: var(--rayon);
+    border:        none;
+    cursor:        pointer;
+    font-size:     0.85rem;
+    font-weight:   500;
+    font-family:   var(--fonte);
+    transition:    opacity 0.2s, transform 0.15s;
+    text-align:    center;
+    width:         100%;
+    margin-top:    0.5rem;
+}
+
+.btn:hover      { opacity: 0.85; transform: translateY(-1px); }
+.btn-primary    { background: #3b82f6; color: white; }
+.btn-warning    { background: rgba(245,158,11,0.15); color: var(--couleur-verrouille); border: 1px solid var(--couleur-verrouille); }
+.btn-danger     { background: rgba(239,68,68,0.15);  color: var(--couleur-occupee);   border: 1px solid var(--couleur-occupee); }
+.btn-success    { background: rgba(34,197,94,0.15);  color: var(--couleur-libre);     border: 1px solid var(--couleur-libre); }
+.btn-secondary  { background: var(--bordure);        color: var(--texte-principal); }
+.btn-chirpstack { background: rgba(59,130,246,0.1);  color: #60a5fa; border: 1px solid #3b82f6; }
+.btn-full       { width: 100%; margin-top: 1.2rem; }
+
+.btn-group      { display: flex; gap: 0.5rem; }
+.btn-group .btn { margin-top: 0; }
+
+
+/* ── FORMULAIRES ────────────────────────────────────────────────
+   Champs partagés : connexion, inscription, modals capteur/signalement.
+   ─────────────────────────────────────────────────────────── */
+label {
+    display:       block;
+    font-size:     0.82rem;
+    color:         var(--texte-secondaire);
+    margin-bottom: 0.3rem;
+    margin-top:    0.8rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width:         100%;
+    padding:       0.55rem 0.75rem;
+    background:    var(--bg-principal);
+    border:        1px solid var(--bordure);
+    border-radius: var(--rayon);
+    color:         var(--texte-principal);
+    font-family:   var(--fonte);
+    font-size:     0.88rem;
+    transition:    border-color 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline:      none;
+    border-color: #3b82f6;
+}
+
+.label-checkbox {
+    display:     flex;
+    align-items: center;
+    gap:         0.5rem;
+    cursor:      pointer;
+    font-size:   0.88rem;
+    color:       var(--texte-principal);
+    margin-top:  0.8rem;
+}
+
+.form-row {
+    display:               grid;
+    grid-template-columns: 1fr 1fr;
+    gap:                   0.75rem;
+}
+
+
+/* ── MODALS ─────────────────────────────────────────────────────
+   Overlay + carte centrée. Activé via la classe .actif en JS.
+   ─────────────────────────────────────────────────────────── */
+.modal {
+    display:         none;
+    position:        fixed;
+    inset:           0;
+    background:      rgba(0,0,0,0.7);
+    z-index:         300;
+    align-items:     center;
+    justify-content: center;
+}
+
+.modal.actif { display: flex; }
+
+.modal-content {
+    background:    var(--bg-carte);
+    border:        1px solid var(--bordure);
+    border-radius: var(--rayon-lg);
+    padding:       2rem;
+    width:         100%;
+    max-width:     460px;
+    position:      relative;
+    box-shadow:    var(--ombre);
+}
+
+.modal-content h3 { font-size: 1.1rem; margin-bottom: 1.2rem; }
+
+.modal-close {
+    position:      absolute;
+    top:           1rem;
+    right:         1rem;
+    background:    transparent;
+    border:        none;
+    color:         var(--texte-secondaire);
+    font-size:     1.1rem;
+    cursor:        pointer;
+    padding:       0.2rem 0.5rem;
+    border-radius: var(--rayon);
+}
+
+.modal-close:hover { background: var(--bordure); }
+
+
+/* ── TOAST ──────────────────────────────────────────────────────
+   Notification en bas à droite, affiché/masqué via .actif en JS.
+   ─────────────────────────────────────────────────────────── */
+.notif {
+    position:       fixed;
+    bottom:         2rem;
+    right:          2rem;
+    background:     var(--bg-carte);
+    border:         1px solid var(--couleur-libre);
+    color:          var(--texte-principal);
+    padding:        0.75rem 1.2rem;
+    border-radius:  var(--rayon);
+    font-size:      0.88rem;
+    opacity:        0;
+    transform:      translateY(10px);
+    transition:     opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index:        400;
+    box-shadow:     var(--ombre);
+}
+
+.notif.actif        { opacity: 1; transform: translateY(0); }
+.notif.notif-erreur { border-color: var(--couleur-occupee); }
+
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────
+   Ajustements globaux pour mobile.
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .site-header { padding: 0.75rem 1rem; }
+    .form-row    { grid-template-columns: 1fr; }
+}

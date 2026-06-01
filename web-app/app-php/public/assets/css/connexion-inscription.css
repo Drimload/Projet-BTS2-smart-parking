@@ -1,0 +1,71 @@
+/* ============================================================
+   connexion-inscription.css — Spécifique à connexion-inscription.php
+   Layout deux colonnes connexion/inscription, messages feedback.
+   ============================================================ */
+
+
+/* ── LAYOUT PRINCIPAL ───────────────────────────────────────────
+   Centrage vertical/horizontal de la carte sur toute la hauteur.
+   ─────────────────────────────────────────────────────────── */
+.auth-main {
+    min-height:      calc(100vh - 120px);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    padding:         2rem;
+}
+
+.auth-container {
+    display:       flex;
+    width:         100%;
+    max-width:     900px;
+    background:    var(--bg-carte);
+    border:        1px solid var(--bordure);
+    border-radius: var(--rayon-lg);
+    overflow:      hidden;
+    box-shadow:    var(--ombre);
+}
+
+
+/* ── BLOCS CONNEXION / INSCRIPTION ──────────────────────────────
+   Deux blocs flex égaux séparés par .auth-separateur.
+   ─────────────────────────────────────────────────────────── */
+.auth-bloc {
+    flex:    1;
+    padding: 2.5rem 2rem;
+}
+
+.auth-bloc h2 {
+    font-size:     1.3rem;
+    font-weight:   700;
+    margin-bottom: 1.5rem;
+}
+
+.auth-separateur {
+    width:      1px;
+    background: var(--bordure);
+    margin:     1.5rem 0;
+}
+
+
+/* ── MESSAGES FEEDBACK ──────────────────────────────────────────
+   Alertes inline affichées après soumission du formulaire.
+   ─────────────────────────────────────────────────────────── */
+.auth-message {
+    padding:       0.6rem 0.9rem;
+    border-radius: var(--rayon);
+    font-size:     0.85rem;
+    margin-bottom: 1rem;
+}
+
+.auth-erreur { background: rgba(239,68,68,0.1); color: var(--couleur-occupee); }
+.auth-succes { background: rgba(34,197,94,0.1);  color: var(--couleur-libre); }
+
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────
+   Sous 768px : colonnes empilées, séparateur horizontal.
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .auth-container  { flex-direction: column; }
+    .auth-separateur { width: auto; height: 1px; margin: 0 1.5rem; }
+}

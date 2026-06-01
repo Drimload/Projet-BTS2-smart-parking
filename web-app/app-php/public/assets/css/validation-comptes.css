@@ -1,0 +1,71 @@
+/* ============================================================
+   validation-comptes.css — Spécifique à validation-comptes.php
+   Tableau des comptes en attente, groupes par rôle, actions.
+   ============================================================ */
+
+
+/* ── WRAPPER ────────────────────────────────────────────────────
+   Conteneur centré identique au dashboard mais plus étroit.
+   ─────────────────────────────────────────────────────────── */
+.validation-wrapper  { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+.validation-section  { margin-bottom: 3rem; }
+
+.validation-section h1 {
+    font-size:      1.2rem;
+    font-weight:    700;
+    margin-bottom:  1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom:  1px solid var(--bordure);
+}
+
+
+/* ── GROUPES PAR RÔLE ───────────────────────────────────────────
+   Un bloc par rôle (Visiteur, Employé…) avec titre + compteur.
+   ─────────────────────────────────────────────────────────── */
+.role-group { margin-bottom: 2rem; }
+
+.role-group h2 {
+    display:       flex;
+    align-items:   center;
+    gap:           0.75rem;
+    margin-bottom: 0.8rem;
+    font-size:     1rem;
+}
+
+.role-count { font-size: 0.8rem; color: var(--texte-secondaire); font-weight: 400; }
+
+
+/* ── TABLEAU ────────────────────────────────────────────────────
+   Tableau scrollable horizontalement avec entêtes grisés.
+   ─────────────────────────────────────────────────────────── */
+.table-wrapper {
+    overflow-x:    auto;
+    border-radius: var(--rayon-lg);
+    border:        1px solid var(--bordure);
+}
+
+.accounts-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+.accounts-table th {
+    background:     var(--bg-principal);
+    color:          var(--texte-secondaire);
+    font-weight:    600;
+    padding:        0.7rem 1rem;
+    text-align:     left;
+    font-size:      0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.accounts-table td          { padding: 0.7rem 1rem; border-top: 1px solid var(--bordure); }
+.accounts-table tr:hover td { background: var(--bg-carte-hover); }
+
+.empty-message { color: var(--texte-secondaire); font-size: 0.88rem; padding: 1rem 0; }
+
+
+/* ── ACTIONS ────────────────────────────────────────────────────
+   Boutons valider/refuser alignés sur une ligne par compte.
+   ─────────────────────────────────────────────────────────── */
+.actions-form      { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.actions-form form { margin: 0; }
+.actions-form .btn { width: auto; margin-top: 0; padding: 0.35rem 0.8rem; font-size: 0.8rem; }

@@ -15,9 +15,9 @@
         container: smart-parking_chirpstack
 
     - pgAdmin:
-        href: http://{{HOMEPAGE_VAR_IP}}:5050
+        href: http://{{HOMEPAGE_VAR_IP}}:5051
         target: _blank
-        description: "100.118.69.115:5050 • Interface BDD • Identifiant: admin@smartparking.com - MDP: Password123"
+        description: "100.118.69.115:5051 • Interface BDD • Identifiant: admin@smartparking.com - MDP: Password123"
         icon: mdi-database-cog
         container: smart-parking_pgadmin
 

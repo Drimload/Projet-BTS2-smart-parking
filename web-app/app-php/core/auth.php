@@ -1,44 +1,45 @@
 <?php
 // ============================================================
-// core/auth.php  ← était "includes/auth.php"
-// Vérification des droits d'accès
-//
-// UTILISATION :
-//
-// Page employé :
-//   require_once __DIR__ . '/../core/auth.php';
-//   verifierConnexion();
-//   verifierRole(['Employé', 'Administrateur']);
-//
-// Page admin :
-//   require_once __DIR__ . '/../core/auth.php';
-//   verifierConnexion();
-//   verifierRole(['Administrateur']);
+// core/auth.php
 // ============================================================
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-function verifierConnexion() {
+// ── CONFIGURATION CHIRPSTACK ─────────────────────────────────
+define('CHIRPSTACK_URL', 'http://chirpstack-rest-api:8090');
+define('CHIRPSTACK_API_KEY',    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjVhY2VlMWI3LWJkZTYtNGUzZS05NGRiLTlhNzJhYjAxMTA3MSIsInR5cCI6ImtleSJ9.u5Avzgab0XoG9iyMzQ2d8aLQzf2EufyRwtYotkprAJw');
+define('CHIRPSTACK_APP_ID',     'd56b9f07-9f1e-4f5d-b024-ba5891058a73');
+define('CHIRPSTACK_PROFILE_ID', '8038bb54-4b1f-4ed9-acf1-b89e5c5b850a');
+// ── SESSION & RÔLES ──────────────────────────────────────────
+
+// Redirige vers login si pas connecté
+function verifierConnexion(): void {
     if (!isset($_SESSION['user'])) {
-        header('Location: /acces/login.php');  // ← chemin corrigé
+        header('Location: /connexion-inscription.php');
         exit();
     }
 }
 
-function verifierRole($rolesAutorises) {
-    $roleUtilisateur = $_SESSION['user']['role'];
-    if (!in_array($roleUtilisateur, $rolesAutorises)) {
-        header('Location: /index.php');
+// Redirige vers dashboard si le rôle n'est pas autorisé
+function verifierRole(array $rolesAutorises): void {
+    verifierConnexion();
+    $role = $_SESSION['user']['role'] ?? null;
+    if (!in_array($role, $rolesAutorises, true)) {
+        header('Location: /dashboard.php');
         exit();
     }
 }
 
-function estConnecte() {
+function estConnecte(): bool {
     return isset($_SESSION['user']);
 }
 
-function getRole() {
-    return $_SESSION['user']['role'] ?? null;  // ← simplifié avec ??
+function getRole(): ?string {
+    return $_SESSION['user']['role'] ?? null;
+}
+
+function getUser(): ?array {
+    return $_SESSION['user'] ?? null;
 }

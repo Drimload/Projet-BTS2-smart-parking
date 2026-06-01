@@ -8,11 +8,11 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      TZ: Europe/Paris
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
       - ./services/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  # Interface pgAdmin
   pgadmin:
     image: dpage/pgadmin4
     container_name: smart-parking_pgadmin
@@ -20,10 +20,19 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+      PGADMIN_REPLACE_SERVERS_ON_STARTUP: 'True'
+      PGPASS_FILE: /pgadmin4/pgpass
+      TZ: Europe/Paris
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       - db
+    volumes:
+      - ./services/pgadmin:/var/lib/pgadmin
+      - ./services/pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - ./services/pgadmin/pgpass:/pgadmin4/pgpass
 
   # Broker MQTT Mosquitto
   mqtt:
@@ -32,10 +41,31 @@ services:
     restart: always
     ports:
       - "1883:1883"
+    environment:
+      TZ: Europe/Paris
     volumes:
       - ./services/mosquitto/config:/mosquitto/config
       - ./services/mosquitto/data:/mosquitto/data
       - ./services/mosquitto/log:/mosquitto/log
+
+  # MQTT Listener - Smart Parking
+  mqtt-listener:
+    build: ./services/mqtt-listener
+    container_name: smart-parking_mqtt-listener
+    restart: always
+    depends_on:
+      - mqtt
+      - db
+    environment:
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+      - MQTT_TOPIC=application/#
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=Europe/Paris
 
   # Redis
   redis:
@@ -43,6 +73,8 @@ services:
     container_name: smart-parking_redis
     restart: always
     command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      TZ: Europe/Paris
     volumes:
       - ./data/redis:/data
 
@@ -68,6 +100,7 @@ services:
       - CHIRPSTACK_API_SECRET=${CHIRPSTACK_API_SECRET}
       - CHIRPSTACK_INTEGRATION_ENABLED=mqtt
       - CHIRPSTACK_INTEGRATION_MQTT_SERVER=tcp://mqtt:1883
+      - TZ=Europe/Paris
 
   # ChirpStack Gateway Bridge
   chirpstack-gateway-bridge:
@@ -84,6 +117,19 @@ services:
       - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mqtt:1883
       - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}
       - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/command/#
+      - TZ=Europe/Paris
+
+  chirpstack-rest-api:
+    image: ghcr.io/chirpstack/chirpstack-rest-api:4
+    container_name: smart-parking_chirpstack-rest-api
+    restart: always
+    command: --server chirpstack:8080 --bind 0.0.0.0:8090 --insecure
+    ports:
+      - "8090:8090"
+    depends_on:
+      - chirpstack
+    environment:
+      TZ: Europe/Paris
 
   # Homepage - Tableau de bord
   homepage:
@@ -100,6 +146,7 @@ services:
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=*
       - HOMEPAGE_VAR_IP=${HOMEPAGE_IP}
+      - TZ=Europe/Paris
 
   # Portainer
   portainer:
@@ -111,9 +158,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data/portainer:/data
+    environment:
+      TZ: Europe/Paris
 
-  # Application Web Node.js
-# Application Web PHP
+  # Application Web PHP
   webapp:
     build: ./web-app/app-php
     container_name: smart-parking_webapp
@@ -131,6 +179,7 @@ services:
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - SESSION_SECRET=${SESSION_SECRET}
+      - TZ=Europe/Paris
 
   # # Reverse Proxy HTTPS - À activer plus tard
   # nginx:

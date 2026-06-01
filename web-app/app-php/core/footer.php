@@ -1,13 +1,10 @@
 <?php
 // ============================================================
-// includes/footer.php
-// Pied de page commun à toutes les pages
-//
-// Contient la fermeture des balises HTML ouvertes dans header.php
-// et les scripts JavaScript
+// core/footer.php  ← était "includes/footer.php"
 //
 // Utilisation :
-// require_once 'includes/footer.php';
+// require_once __DIR__ . '/footer.php';       (depuis core/)
+// require_once __DIR__ . '/../core/footer.php'; (depuis acces/, employe/, admin/)
 // Toujours à la fin de chaque page
 // ============================================================
 ?>
@@ -16,8 +13,7 @@
         <p>Smart Parking CREPS Hauts-de-France &copy; 2026</p>
     </footer>
 
-    <!-- Notre fichier JavaScript -->
-    <script src="/assets/js/main.js"></script>
+    
 
 </body>
 </html>
