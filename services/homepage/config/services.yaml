@@ -3,56 +3,70 @@
     - Application Web:
         href: http://{{HOMEPAGE_VAR_IP}}:80
         target: _blank
-        description: "100.118.69.115:80 • Smart Parking Web App • PHP"
+        description: "{{HOMEPAGE_VAR_IP}}:80 • Smart Parking Web App • PHP"
         icon: mdi-parking
         container: smart-parking_webapp
 
     - ChirpStack:
         href: http://{{HOMEPAGE_VAR_IP}}:8080
         target: _blank
-        description: "100.118.69.115:8080 • LoRaWAN Server • Identifiant: admin - MDP: Password123"
+        description: "{{HOMEPAGE_VAR_IP}}:8080 • LoRaWAN Server"
         icon: mdi-radio-tower
         container: smart-parking_chirpstack
+
+    - ChirpStack REST API:
+        href: http://{{HOMEPAGE_VAR_IP}}:8090
+        target: _blank
+        description: "{{HOMEPAGE_VAR_IP}}:8090 • ChirpStack REST API"
+        icon: mdi-api
+        container: smart-parking_chirpstack-rest-api
 
     - pgAdmin:
         href: http://{{HOMEPAGE_VAR_IP}}:5051
         target: _blank
-        description: "100.118.69.115:5051 • Interface BDD • Identifiant: admin@smartparking.com - MDP: Password123"
+        description: "{{HOMEPAGE_VAR_IP}}:5051 • Interface BDD PostgreSQL"
         icon: mdi-database-cog
         container: smart-parking_pgadmin
 
     - Portainer:
         href: http://{{HOMEPAGE_VAR_IP}}:9000
         target: _blank
-        description: "100.118.69.115:9000 • Gestion Docker • Identifiant: admin - MDP: Password1234"
+        description: "{{HOMEPAGE_VAR_IP}}:9000 • Gestion Docker"
         icon: mdi-docker
         container: smart-parking_portainer
 
     - Homepage:
         href: http://{{HOMEPAGE_VAR_IP}}:3000
         target: _blank
-        description: "100.118.69.115:3000 • Dashboard Applications"
+        description: "{{HOMEPAGE_VAR_IP}}:3000 • Dashboard Applications"
         icon: mdi-view-dashboard
         container: smart-parking_homepage
 
 - Smart Parking Serveur:
+
     - Gateway Bridge:
-        description: "UDP 100.118.69.115:1700 • LoRa Gateway Bridge"
+        description: "{{HOMEPAGE_VAR_IP}}:1700/UDP • LoRa Gateway Bridge • Reçoit trames Laird"
         icon: mdi-access-point
         container: smart-parking_gwbridge
 
-    - MQTT:
-        description: "100.118.69.115:1883 • Mosquitto Broker"
+    - MQTT Listener:
+        description: "{{HOMEPAGE_VAR_IP}} • Script Python • MQTT → PostgreSQL"
+        icon: mdi-script-text
+        container: smart-parking_mqtt-listener
+
+    - MQTT Mosquitto:
+        description: "{{HOMEPAGE_VAR_IP}}:1883 • Broker MQTT • Topic application/#"
         icon: mdi-connection
         container: smart-parking_mqtt
 
     - Redis:
-        description: "100.118.69.115:6379 • Cache Server"
+        description: "{{HOMEPAGE_VAR_IP}}:6379 • Cache ChirpStack"
         icon: mdi-memory
         container: smart-parking_redis
 
 - Database:
+
     - PostgreSQL:
-        description: "100.118.69.115:5432 • BDD PostgreSQL"
+        description: "{{HOMEPAGE_VAR_IP}}:5432 • Base de données parking_db"
         icon: mdi-database
         container: smart-parking_db

@@ -43,4 +43,5 @@ web-app/app-php/vendor/
 *.log
 *.tmp
 __pycache__/
-.DS_Store
+.DS_Storeservices/pgadmin/sessions/
+services/pgadmin/storage/
