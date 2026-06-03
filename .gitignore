@@ -3,38 +3,48 @@
 # ================================
 .env
 
+
 # ================================
 # DONNÉES VOLUMÉTRIQUES
 # (données persistantes Docker)
 # ================================
 data/
 
+
 # ================================
 # LOGS ET DONNÉES MOSQUITTO
-# (déplacés dans services/)
 # ================================
 services/mosquitto/log/
 services/mosquitto/data/
+
 
 # ================================
 # LOGS HOMEPAGE
 # ================================
 services/homepage/config/logs/
 
+
 # ================================
 # CERTIFICATS SSL
-# (déplacés dans services/)
 # ================================
 services/certs/
 *.key
 *.crt
 
+
 # ================================
-# NODE.JS
-# (dépendances, ne jamais committer)
+# NODE.JS / PHP
 # ================================
 web-app/app-js/node_modules/
 web-app/app-php/vendor/
+
+
+# ================================
+# PGADMIN - Sessions et stockage
+# ================================
+services/pgadmin/sessions/
+services/pgadmin/storage/
+
 
 # ================================
 # FICHIERS SYSTÈME
@@ -43,5 +53,4 @@ web-app/app-php/vendor/
 *.log
 *.tmp
 __pycache__/
-.DS_Storeservices/pgadmin/sessions/
-services/pgadmin/storage/
+.DS_Store
