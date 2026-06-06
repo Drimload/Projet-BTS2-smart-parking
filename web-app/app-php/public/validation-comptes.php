@@ -25,11 +25,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$id_utilisateur]);
 
         } elseif ($action === 'refuser' || $action === 'supprimer') {
-            $stmt = $pdo->prepare("
-                DELETE FROM public.utilisateur
-                WHERE id_utilisateur = ?
-            ");
-            $stmt->execute([$id_utilisateur]);
+            try {
+                $pdo->beginTransaction();
+
+                // 1. Supprimer les sessions liées
+                $stmt = $pdo->prepare("
+                    DELETE FROM public.session
+                    WHERE id_utilisateur = ?
+                ");
+                $stmt->execute([$id_utilisateur]);
+
+                // 2. Supprimer les signalements liés
+                $stmt = $pdo->prepare("
+                    DELETE FROM public.signalement
+                    WHERE id_utilisateur = ?
+                ");
+                $stmt->execute([$id_utilisateur]);
+
+                // 3. Supprimer l'utilisateur
+                $stmt = $pdo->prepare("
+                    DELETE FROM public.utilisateur
+                    WHERE id_utilisateur = ?
+                ");
+                $stmt->execute([$id_utilisateur]);
+
+                $pdo->commit();
+
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                // Optionnel : log l'erreur sans l'exposer
+                error_log('Erreur suppression utilisateur : ' . $e->getMessage());
+            }
 
         } elseif ($action === 'modifier') {
             $prenom         = trim($_POST['prenom']         ?? '');
